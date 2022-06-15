@@ -1,0 +1,152 @@
+TableScreen:
+  name:"table_screen"
+  record_count_label:record_count_label
+  fancy_header:fancy_header
+  scrollview:scrollview
+  table_grid:table_grid
+  canvas.before:
+    Color:
+      rgb: [100/255,100/255,100/255]
+    Rectangle:
+      pos: self.pos
+      size: self.size
+  AnchorLayout:
+
+    BoxLayout:
+      id:super_box
+      orientation:"vertical"
+      size_hint:.8, .6
+      Label:
+        id:record_count_label
+        size_hint:1,.1
+        canvas:
+          Color:
+            rgb: .1, 0.1, 0.1
+          Rectangle:
+            pos: super_box.x, record_count_label.y
+            size: record_count_label.width, 2
+          Rectangle:
+            pos: super_box.x, record_count_label.top
+            size: record_count_label.width, 2
+
+      AnchorLayout:
+        size_hint:None,None
+        width:scroll_box.width
+        height: fancy_header.height
+        anchor_x:"left"
+        FancyHeader:
+          id:fancy_header
+          size_hint:1,None
+
+      BoxLayout:
+        id:scroll_box
+        ScrollView:
+          id:scrollview
+          TableGrid
+            id:table_grid
+            height:self.minimum_height
+        BoxLayout:
+          id:table_nav_box
+          orientation:"vertical"
+          size_hint:.2,1
+          Button:
+            id:nav_top
+            text:"Top of List"
+            on_press:scrollview.scroll_y=1
+          Button:
+            id:nav_middle
+            text:"Middle of List"
+            on_press:scrollview.scroll_y=.5
+          Button:
+            id:nav_bottom
+            text:"Bottom of List"
+            on_press:scrollview.scroll_y=0
+
+
+<FancyHeader@BoxLayout>
+  id_btn:id_btn
+  date_btn:date_btn
+  act_btn:act_btn
+  delete_column:delete_column
+  size_hint:None,None
+  height:max(id_btn.texture_size[1],date_btn.texture_size[1],act_btn.texture_size[1],delete_column.texture_size[1])+3
+  Button:
+    id:id_btn
+    text:"ID"
+    size_hint:None,1
+    width:root.parent.width*.21
+    #if i made this the same width as row boxes then it would match
+    #row boxes has padding which makes them a little wider than root.parent.width*.2
+    # on_press: root.parent.children[0].children[0].sort_util(self)
+
+    #find TableGrid (1st parent screoll view, 2nd boxlayout )
+    on_press:
+      root.parent.parent.children[0].children[1].children[0].sort_util(self)
+  Button:
+    id:act_btn
+    text:"Activity Name"
+    size_hint:None,1
+    width:root.parent.width*.21
+    on_press: root.parent.parent.children[0].children[1].children[0].sort_util(self)
+  Button:
+    id:date_btn
+    text:"Date/Time"
+    size_hint:None,1
+    width:root.parent.width*.21
+    on_press: root.parent.parent.children[0].children[1].children[0].sort_util(self)
+
+  Button:
+    id:delete_column
+    size_hint:None,1
+    width:root.parent.width*.21
+    on_press:root.parent.parent.children[0].children[1].children[0].sort_util(self)
+
+
+
+<RowBox>:
+  act_id:act_id
+  act_name:act_name
+  act_date:act_date
+  act_delete:act_delete
+  size_hint:1,None
+  height:act_id.height+8
+  padding:3,0,3,0
+  canvas.before:
+    Color:
+      rgb: [100/255,200/255,100/255]
+    Rectangle:
+      pos: self.pos
+      size: self.size
+
+  AnchorLayout:
+    padding:4
+    size_hint:1,None
+    # height:act_id.texture_size[1]
+    height:30
+    SpecialLabel
+      id:act_id
+
+  AnchorLayout:
+    padding:4
+    SpecialLabel
+      id:act_name
+
+  AnchorLayout:
+    padding:4
+    SpecialLabel
+      id:act_date
+
+  AnchorLayout:
+    padding:4
+    Button
+      id:act_delete
+      on_press: root.parent.delete_act(self)
+
+
+<SpecialLabel@Label>
+  canvas.before:
+    Color:
+      rgb: [100/255,100/255,200/255]
+    Rectangle:
+      pos: self.pos
+      size: self.size
