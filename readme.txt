@@ -6,3 +6,6 @@ This app builds kivy table. It’s features:
 -delete rows
 -Toggle between all data and 20 observations
 -Buttons act like toggles
+
+
+See gif for preview of the app.
